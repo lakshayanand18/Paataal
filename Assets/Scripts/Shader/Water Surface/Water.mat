@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Water
+  m_Shader: {fileID: -6465566751694194690, guid: ba5be241e9306d01a8aaebf316b0d44b, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _SPECULAR_SETUP
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  - SHADOWCASTER
+  - DepthOnly
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Reflection_2D:
+        m_Texture: {fileID: 2800000, guid: cd7ab1200ce6af7b3a2d4b7476a395f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _CastShadows: 0
+    - _Cull: 0
+    - _Density: 0.1
+    - _Depth_Distance: 88.1
+    - _Direction: 24.38
+    - _Direction_1: 94.66
+    - _Direction_2: 62.4
+    - _Direction_3: 152.9
+    - _Direction_4: 255.28
+    - _Direction_5: 342
+    - _Direction_6: 91.02
+    - _Direction_7: 186.91
+    - _Distance: 146.11
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
+    - _Edge_1: 1.03
+    - _Edge_2: 0.26
+    - _Float: 0
+    - _Foam_Amount: 57.17
+    - _Foam_CutOut: 1.1
+    - _Foam_Scale: 19.03
+    - _Foam_Speed: 0.1
+    - _Normal_Strength: 0.7
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _Reflaction_Speed: 0.08
+    - _Reflection_Scale: 11.4
+    - _Refraction_strength: 0.08
+    - _Specular_size: 0.93
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 1
+    - _Wave_Amplitude: 0.1
+    - _Wave_Length: 0.1
+    - _Wave_Speed: 1
+    - _WorkflowMode: 0
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
+    - _smoothness: 0.31
+    - _water_Amplitude: 0.15
+    m_Colors:
+    - _DeepColor: {r: 0.09877246, g: 0.31132078, b: 0, a: 0.62352943}
+    - _Density: {r: 1, g: 1, b: 1, a: 1}
+    - _Foam_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Reflection_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _Specular_color: {r: 1, g: 1, b: 1, a: 1}
+    - _SurfaceColor: {r: 0.19662738, g: 1, b: 0, a: 0.5019608}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &3248142957635836401
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
