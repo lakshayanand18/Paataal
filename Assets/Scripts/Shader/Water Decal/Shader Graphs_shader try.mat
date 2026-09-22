@@ -61,12 +61,12 @@ Material:
     - _QueueOffset: 0
     - _angle_speed: 0.54
     - _angle_speed_1: 0.02
-    - _density: 1.92
+    - _density: 2.08
     - _voronoi_speed: 8.69
     - _voronoi_speed_1: 1
     m_Colors:
     - _Base_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.6179246, g: 0.7134434, b: 1, a: 1}
-    - _Decal_Color: {r: 0.904839, g: 1, b: 0.43137252, a: 0.6039216}
+    - _Decal_Color: {r: 0.6484461, g: 1, b: 0.504717, a: 0.21960784}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

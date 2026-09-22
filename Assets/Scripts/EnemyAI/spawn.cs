@@ -9,10 +9,14 @@ public class spawn : MonoBehaviour
     public GameObject enemy;
     public int spawnRadius;
     public float timeBeforeNewWave;
-    
+    private float newWaveTime = 0f;
 
     private void Start()
     {
+        if (newWaveTime == timeBeforeNewWave)
+        {
+            newWaveTime = timeBeforeNewWave;
+        }
         //Initial Wave
         for (int i = 1; i <= waveList; i++)
         {
@@ -23,19 +27,16 @@ public class spawn : MonoBehaviour
 
     private void Update()
     {
-        if(timeBeforeNewWave < 2f)
-            timeBeforeNewWave = 5f;
-        
         // Incremental Wave Spawn
         
-        if (Time.time > timeBeforeNewWave)
+        if (Time.timeSinceLevelLoad > newWaveTime)
         {
             for (int i = 1; i <= waveList; i++)
             {
                 Vector3 position = transform.position + Random.insideUnitSphere * spawnRadius;
                 Instantiate(enemy, position, Quaternion.identity);
             }
-            timeBeforeNewWave += Time.timeSinceLevelLoad;
+            newWaveTime += timeBeforeNewWave;
         }
     }
 }
