@@ -63,7 +63,7 @@ Material:
     - _CastShadows: 0
     - _Cull: 0
     - _Density: 0.1
-    - _Depth_Distance: 88.1
+    - _Depth_Distance: 31.37
     - _Direction: 24.38
     - _Direction_1: 94.66
     - _Direction_2: 62.4

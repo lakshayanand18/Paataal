@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
 
 
@@ -94,7 +93,7 @@ public abstract class EnemyInteractionState : BaseState<EnemyStateMachine.EnemyS
         }
 
 
-        Vector3 SeparationAngle = Vector3.zero;
+        Vector3 separationValue = Vector3.zero;
 
 
         foreach (EnemyContext other in neighbours)
@@ -112,10 +111,10 @@ public abstract class EnemyInteractionState : BaseState<EnemyStateMachine.EnemyS
 
                 Vector3 pushAway = distanceBetween.normalized / distance;
 
-                SeparationAngle += pushAway;
+                separationValue += pushAway;
             }
         }
 
-        return SeparationAngle.normalized * Context.SeparationWeight;
+        return separationValue.normalized * Context.SeparationWeight;
     }
 }

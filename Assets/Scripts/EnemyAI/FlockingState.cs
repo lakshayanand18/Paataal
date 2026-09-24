@@ -34,7 +34,6 @@ public class FlockingState : EnemyInteractionState
             Alignment(myListOfNeighbours) +
             Cohesion(myListOfNeighbours) +
             Separation(myListOfNeighbours) +
-            StayNearPlayer() +
             smoothedAvoidance;
 
         Vector3 velocity = Vector3.zero;
@@ -98,22 +97,6 @@ public class FlockingState : EnemyInteractionState
         direction += Context.EnemyTransform.right * turnAmount;
 
         return direction.normalized * Context.AlignmentWeight;
-    }
-
-    Vector3 StayNearPlayer()
-    {
-        if (Context.Player == null)
-            return Vector3.zero;
-
-        float distance = Vector3.Distance(Context.EnemyTransform.position, Context.Player.position);
-
-        if (distance <= Context.MaxFlockingDistanceFromPlayer)
-            return Vector3.zero;
-
-        Vector3 directionToPlayer = (Context.Player.position - Context.EnemyTransform.position).normalized;
-        float strength = Mathf.InverseLerp(Context.MaxFlockingDistanceFromPlayer, Context.MaxFlockingDistanceFromPlayer * 2f, distance);
-
-        return directionToPlayer * Context.CohesionWeight * Context.ReturnToPlayerWeight * strength;
     }
 
     Vector3 Cohesion(List<EnemyContext> neighbour)
