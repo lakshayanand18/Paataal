@@ -117,3 +117,8 @@ InitTestScene*.unity*
 .plastic/
 .vscode/
 Class1.cs
+.dotnet-home/
+.idea/
+.plastic/
+.vscode/
+Class1.cs
