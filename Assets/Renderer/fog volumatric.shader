@@ -22,6 +22,7 @@
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment frag
+            #pragma target 3.5
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -69,6 +70,7 @@
                float transmittance = 1.0;
                float3 lightAccumulation = float3(0, 0, 0);
                // --- LOOP 1 ---
+                
                while(distTravelled < transitionDistLimit)
                {
                    float3 rayPos = entryPoint + rayDir * distTravelled;

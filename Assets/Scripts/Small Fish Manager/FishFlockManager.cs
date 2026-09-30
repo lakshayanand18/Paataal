@@ -1,22 +1,21 @@
 using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 public class FishFlockManager : MonoBehaviour
 {
     const int MAX_BATCH_SIZE = 1023;
-    readonly Vector3 fishScale = new Vector3(0.2f, 0.2f, 0.2f);
-
-
 
     [Header ("Fish Setting")]
     [SerializeField] Material material;
     [SerializeField] Mesh mesh;
+    [SerializeField] private float scale = 1f;
     [SerializeField] int numberOfFishes = 20;
     [SerializeField] int numberOfFishesInSchools = 50;
-    [SerializeField] int SchoolRadious = 50;
-    
+    [SerializeField] int schoolRadios = 50;
+
+
     [Header("Flock Settings")]
-    [SerializeField] Transform player;
     [SerializeField] float movementSpeed;
     [SerializeField] float maxForce = 5f;
     [SerializeField] float alignmentWeight;
@@ -28,11 +27,15 @@ public class FishFlockManager : MonoBehaviour
     [SerializeField] Vector3 gridWorldSize = new Vector3(50f, 50f, 50f); // Size of your "fish tank"
     [SerializeField] int cellSize = 5;
 
-
     [Header ("Obstacle")]
     [SerializeField] LayerMask obstacleLayer; // Assign this to a layer like "Obstacles" or "Default"
+
     [SerializeField] float sightDistance = 3f; // How far ahead the fish can see
     [SerializeField] float avoidanceWeight = 10f;
+    [SerializeField]private bool showObstacle;
+    [SerializeField]private bool showGrid;
+
+    private Vector3 fishScale;
     RenderParams rp;
     Matrix4x4[][] instData;
     Vector3[] fishPositions;
@@ -42,41 +45,38 @@ public class FishFlockManager : MonoBehaviour
     Vector3 separation;
     Vector3 avoidanceSteer;
 
-    // tells about fishes 
-    public class SchoolData
-    {
-        public int startIndex;
-        public int fishCount;
-    }
-
-    public SchoolData[] schools;
-
     // obstacle grid
     bool[,,] obstacleGrid;
     int gridX, gridY, gridZ;
     int safeCellSize;
+    List<Vector3Int> activeCells = new List<Vector3Int>();
 
     Vector3[] fishVelocities;
+
+
     //FishList
     List<int>[,,] fishList;
-
-    List<Vector3Int> activeCells = new List<Vector3Int>();
 
     private Vector3 gridBottemLeft; // it gives bottem left value in the origin
 
     void Start()
     {
+        fishScale = Vector3.one * scale;
         List<int> school = new List<int>();
-
-
+        
+        // this the bottom left of the grid 
         gridBottemLeft = transform.position - (gridWorldSize / 2f);
+        
+        // necessary for Instancing 
         rp = new RenderParams(material);
         fishPositions = new Vector3[numberOfFishes];
         fishVelocities = new Vector3[numberOfFishes];
-        // batching 
+        
+        // Total number of batches in matrix 
         int totalBatches = Mathf.CeilToInt((float)numberOfFishes / MAX_BATCH_SIZE);
         instData = new Matrix4x4[totalBatches][];
-
+        
+        // Gives the size of matrix
         for (int i = 0; i < totalBatches; i++)
         {
             int currentBatchSize = (i == totalBatches - 1 && numberOfFishes % MAX_BATCH_SIZE != 0)
@@ -85,21 +85,25 @@ public class FishFlockManager : MonoBehaviour
 
             instData[i] = new Matrix4x4[currentBatchSize];
         }
-
+        
+        //the gird 
         InitializeGrid();
+        
         int currentNumberOfFishes = numberOfFishes;
-        int schoolCount = Mathf.CeilToInt((float)numberOfFishes / numberOfFishesInSchools);
-
+        int schoolCount = Mathf.CeilToInt((float)numberOfFishes / numberOfFishesInSchools);  //number of fishes in a school
+        
+        // checks if there is no fish 
         if (currentNumberOfFishes > 0)
         {
             int globalFishIndex = 0;
-
+            
             for (int i = 0; i < schoolCount; i++)
-            {
+            {   
+                // Determine the size and radius of fish 
                 Vector3 schoolcenter = new Vector3(
-                    Random.Range(transform.position.x - gridWorldSize.x / 2f + SchoolRadious, transform.position.x + gridWorldSize.x / 2f - SchoolRadious),
-                    Random.Range(transform.position.y - gridWorldSize.y / 2f + SchoolRadious, transform.position.y + gridWorldSize.y / 2f - SchoolRadious),
-                    Random.Range(transform.position.z - gridWorldSize.z / 2f + SchoolRadious, transform.position.z + gridWorldSize.z / 2f - SchoolRadious)
+                    Random.Range(transform.position.x - gridWorldSize.x / 2f + schoolRadios, transform.position.x + gridWorldSize.x / 2f - schoolRadios),
+                    Random.Range(transform.position.y - gridWorldSize.y / 2f + schoolRadios, transform.position.y + gridWorldSize.y / 2f - schoolRadios),
+                    Random.Range(transform.position.z - gridWorldSize.z / 2f + schoolRadios, transform.position.z + gridWorldSize.z / 2f - schoolRadios)
                 );
 
                 for (int j = 0; j < numberOfFishesInSchools; j++)
@@ -110,13 +114,14 @@ public class FishFlockManager : MonoBehaviour
                     }
 
                     // Apply position using the global index, then increase it by 1 for the next fish
-                    fishPositions[globalFishIndex] = schoolcenter + Random.insideUnitSphere * SchoolRadious;
+                    fishPositions[globalFishIndex] = schoolcenter + Random.insideUnitSphere * schoolRadios;
 
                     globalFishIndex++;
                     currentNumberOfFishes--;
                 }
             }
         }
+        
         // Spawn fish randomly within the confined area
         for (int i = 0; i < numberOfFishes; i++)
         {
@@ -133,13 +138,16 @@ public class FishFlockManager : MonoBehaviour
     void InitializeGrid()
     {
         safeCellSize = Mathf.Max(1, cellSize);
-
+        
+        //number of cells in x y z Vecotor3 value 
         gridX = Mathf.CeilToInt(gridWorldSize.x / safeCellSize);
         gridY = Mathf.CeilToInt(gridWorldSize.y / safeCellSize);
         gridZ = Mathf.CeilToInt(gridWorldSize.z / safeCellSize);
-
-        // Initialize the 3D array instead of the Dictionary
+        
+        //3D array if the grid
         obstacleGrid = new bool[gridX, gridY, gridZ];
+        
+        // 3d list of fish
         fishList = new List<int>[gridX, gridY, gridZ];
 
         for (int x = 0; x < gridX; x++)
@@ -148,16 +156,22 @@ public class FishFlockManager : MonoBehaviour
             {
                 for (int z = 0; z < gridZ; z++)
                 {
+                    //center of the every cell
                     Vector3 cellCenter = gridBottemLeft + new Vector3(
                         (x * safeCellSize) + (safeCellSize / 2f),
                         (y * safeCellSize) + (safeCellSize / 2f),
                         (z * safeCellSize) + (safeCellSize / 2f)
                     );
-
+                    
+                    // it is used to make avoidance zone 
                     bool isObstacle = Physics.CheckSphere(cellCenter, cellSize / 2f, obstacleLayer);
 
-                    // Assign directly to the 3D array
                     obstacleGrid[x, y, z] = isObstacle;
+                    
+                    if (x == 0 ||  x == gridX - 1 || y == 0 || y == gridY - 1 || z == 0 || z == gridZ - 1)
+                    {
+                        obstacleGrid[x, y, z] = true;
+                    }
                     fishList[x, y, z] = new List<int>();
                 }
             }
@@ -166,17 +180,17 @@ public class FishFlockManager : MonoBehaviour
 
     void UpdateSpatialHash()
     {
-        // 1. Only clear cells that had fish in them last frame
-        for (int i = 0; i < activeCells.Count; i++)
+        //Only clear cells that had fish in them last frame
+        foreach (var cell in activeCells)
         {
-            fishList[activeCells[i].x, activeCells[i].y, activeCells[i].z].Clear();
+            fishList[cell.x, cell.y, cell.z].Clear();
         }
         activeCells.Clear();
 
-        // 2. Assign fish and record active cells
+        //Assign fish and record active cells
         for (int i = 0; i < numberOfFishes; i++)
         {
-            Vector3Int index = PositionToArrayIndex(fishPositions[i]);
+            Vector3Int index = WorldPositionToArrayIndex(fishPositions[i]);
 
             if (fishList[index.x, index.y, index.z].Count == 0)
             {
@@ -186,10 +200,11 @@ public class FishFlockManager : MonoBehaviour
             fishList[index.x, index.y, index.z].Add(i);
         }
     }
-
-    Vector3Int PositionToArrayIndex(Vector3 position)
+    
+    // This function is used to change world position to array index
+    Vector3Int WorldPositionToArrayIndex(Vector3 position)
     {
-        int safeCellSize = Mathf.Max(1, cellSize);
+        safeCellSize = Mathf.Max(1, cellSize);
 
         Vector3 localPos = position - gridBottemLeft;
 
@@ -204,7 +219,8 @@ public class FishFlockManager : MonoBehaviour
 
         return new Vector3Int(x, y, z);
     }
-
+    
+    
     void Flocking()
     {
         float sepParamSqr = separationPerameter * separationPerameter;
@@ -219,7 +235,7 @@ public class FishFlockManager : MonoBehaviour
             int neighbourCount = 0;
 
             // --- INLINED NEIGHBOUR CHECK ---
-            Vector3Int centerIndex = PositionToArrayIndex(fishPositions[i]);
+            Vector3Int centerIndex = WorldPositionToArrayIndex(fishPositions[i]);
 
             // Search 3x3x3 grid directly
             for (int x = -1; x <= 1; x++)
@@ -267,7 +283,6 @@ public class FishFlockManager : MonoBehaviour
                     }
                 }
             }
-            // --- END INLINED NEIGHBOUR CHECK ---
 
             Vector3 steer = Vector3.zero;
 
@@ -275,24 +290,58 @@ public class FishFlockManager : MonoBehaviour
             {
                 Vector3 align = alignment / neighbourCount;
                 Vector3 cohes = (cohesion / neighbourCount) - fishPositions[i];
-                Vector3 seperate = alignment / neighbourCount;
 
                 steer = (align * alignmentWeight) + (cohes * cohesionWeight) + (separation * separationWeight);
                 steer = Vector3.ClampMagnitude(steer, maxForce);
             }
 
-            // Avoidance
-            Vector3 aheadPos = fishPositions[i] + (fishVelocities[i].normalized * sightDistance);
-            Vector3Int aheadIndex = PositionToArrayIndex(aheadPos);
+            //Obstacle Avoidance
+            Ray ray = new Ray(fishPositions[i],fishVelocities[i].normalized);
+            
+            // Vector3Int aheadIndex = WorldPositionToArrayIndex(fishPositions[i] + fishVelocities[i].normalized * sightDistance);
+            Vector3Int[] aheadIndexes = new Vector3Int[4];
 
-            if (obstacleGrid[aheadIndex.x, aheadIndex.y, aheadIndex.z])
+            Vector3 forwards = fishVelocities[i].normalized;
+
+            for (int j = 0; j < 4; j++)
             {
-                Vector3 cellCenter = gridBottemLeft + new Vector3(
-                    (aheadIndex.x * safeCellSize) + (safeCellSize / 2f),
-                    (aheadIndex.y * safeCellSize) + (safeCellSize / 2f),
-                    (aheadIndex.z * safeCellSize) + (safeCellSize / 2f)
+                float distance = sightDistance * (j + 1) / 4f;
+
+                aheadIndexes[j] = WorldPositionToArrayIndex(
+                    fishPositions[i] + forwards * distance
                 );
-                avoidanceSteer = (fishPositions[i] - cellCenter).normalized * avoidanceWeight;
+            }
+
+            for (int j = 0; j < 4; j++)
+            {
+                Vector3Int index = aheadIndexes[j];
+                
+                if (obstacleGrid[index.x, index.y, index.z])
+                {
+                    Vector3 cellCenter = gridBottemLeft + new Vector3(
+                        (index.x * safeCellSize) + (safeCellSize / 2f),
+                        (index.y * safeCellSize) + (safeCellSize / 2f),
+                        (index.z * safeCellSize) + (safeCellSize / 2f)
+                    );
+
+                    // box bounds
+                    Vector3 vMin = cellCenter - new Vector3((safeCellSize / 2f), (safeCellSize / 2f), (safeCellSize / 2f));
+                    Vector3 vMax = cellCenter + new Vector3((safeCellSize / 2f), (safeCellSize / 2f), (safeCellSize / 2f));
+
+                    if (Intersect(vMin, vMax, ray, out float smoothMinBound))
+                    {
+                        Vector3 hitPoint = fishPositions[i] + fishVelocities[i].normalized * smoothMinBound;
+                        
+                        Vector3 away = (hitPoint - cellCenter).normalized;
+                        
+                        Vector3 forward = fishVelocities[i].normalized;
+
+                        Vector3 lateral = away - forward *  Vector3.Dot(away, forward);
+                        
+                        avoidanceSteer = lateral.normalized * avoidanceWeight;
+                        break;
+                    }
+                }
             }
 
             steer += avoidanceSteer;
@@ -300,11 +349,45 @@ public class FishFlockManager : MonoBehaviour
 
             fishVelocities[i] += steer * Time.deltaTime;
             fishVelocities[i] = fishVelocities[i].normalized * movementSpeed;
-            fishPositions[i] += fishVelocities[i] * Time.deltaTime;
+            fishPositions[i]  += fishVelocities[i] * Time.deltaTime;
+            
+            // --- END INLINED NEIGHBOUR CHECK ---
         }
     }
+    
+    public bool Intersect(Vector3 boundsMin, Vector3 boundsMax, Ray ray ,out float tmin)
+    {
+        Vector3 invdir = new Vector3(1 / ray.direction.x, 1 / ray.direction.y, 1 / ray.direction.z);
+        
+        tmin = (boundsMin.x - ray.origin.x) * invdir.x;
+        float tmax = (boundsMax.x - ray.origin.x) * invdir.x;
+        
+        if (tmin > tmax) (tmin, tmax) = (tmax, tmin);
 
-
+        float tymin = (boundsMin.y - ray.origin.y) * invdir.y;
+        float tymax = (boundsMax.y - ray.origin.y) * invdir.y;
+        
+        if(tymin > tymax) (tymin, tymax) = (tymax, tymin);
+        
+        if ((tmin > tymax) || (tymin > tmax)) 
+            return false;
+        
+        if (tymin > tmin) tmin = tymin;
+        if (tymax < tmax) tmax = tymax;
+        
+        float tzmin = (boundsMin.z - ray.origin.z) * invdir.z;
+        float tzmax = (boundsMax.z - ray.origin.z) * invdir.z;
+        
+        if (tzmin > tzmax)  (tzmin, tzmax) = (tzmax, tzmin);
+        
+        if ((tmin > tzmax) || (tzmin > tmax))
+            return false;
+        
+        if (tzmin > tmin) tmin = tzmin;
+        if (tzmax < tmax) tmax = tzmax;
+        return true;
+    }
+    
     void FishRendering()
     {
         for (int i = 0; i < numberOfFishes; i++)
@@ -322,7 +405,7 @@ public class FishFlockManager : MonoBehaviour
             instData[batchIndex][localIndex] = Matrix4x4.TRS(fishPositions[i], rotation, fishScale);
         }
 
-        for (int b = 0; b < instData.Length; b++)
+        for(int b = 0; b < instData.Length; b++)
         {
             Graphics.RenderMeshInstanced(rp, mesh, 0, instData[b]);
         }
@@ -330,9 +413,10 @@ public class FishFlockManager : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        if (obstacleGrid == null) return;
+            
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(transform.position, gridWorldSize);
-        int safeCellSize = Mathf.Max(1, cellSize);
         
         // Calculate grid dimensions safely for the Editor
         int gX = Mathf.CeilToInt(gridWorldSize.x / safeCellSize);
@@ -355,10 +439,19 @@ public class FishFlockManager : MonoBehaviour
                         (y * safeCellSize) + (safeCellSize / 2f),
                         (z * safeCellSize) + (safeCellSize / 2f)
                     );
-
-                    // Draw the individual cell
-                    Gizmos.color = (obstacleGrid[x, y, z]) ? Color.red : Color.white;
-                    Gizmos.DrawWireCube(cellCenter, Vector3.one * safeCellSize);
+                    if(showGrid)
+                    {
+                        Gizmos.color = (obstacleGrid[x, y, z]) ? Color.red : Color.white;
+                        // Draw the individual cell
+                        if (showObstacle)
+                        { 
+                            if(obstacleGrid[x, y, z])
+                                Gizmos.DrawWireCube(cellCenter, Vector3.one * safeCellSize);
+                        }
+                        
+                        else
+                            Gizmos.DrawWireCube(cellCenter, Vector3.one * safeCellSize);
+                    }
                 }
             }
         }
