@@ -6,12 +6,13 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
     {
         Flocking,
         Attack,
-        Seek
+        Seek,
+        Death
     }
     
     //fish health System
     [SerializeField] int health;
-    private  HealthSystem healthSystem;
+    private  HealthSystem _healthSystem;
     bool _leader;
     Rigidbody _rb;
     
@@ -23,6 +24,10 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
     [SerializeField] LayerMask obstacleLayerMask;
     [SerializeField] Collider playerCollider;
     private EnemyContext _context;
+    
+    //Particle Sustem
+    [SerializeField] private ParticleSystem blood;
+    [SerializeField] private ParticleSystem bloodOnDeath;
     
     // Movement
     public float maxForce; 
@@ -39,8 +44,8 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
     public float separationDistance = 10f;
 
     // flags
-    bool isSeeking;
-    bool isSeekingPlayer;
+    bool _isSeeking;
+    bool _isSeekingPlayer;
     
     void Awake()
     {
@@ -48,7 +53,7 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
         _rb = GetComponent<Rigidbody>();
 
         // Health System
-        healthSystem = new HealthSystem(health);
+        _healthSystem = new HealthSystem(health);
         
         if (playerStateMachine == null)
         {
@@ -79,10 +84,12 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
             maxFlockingDistanceFromPlayer,
             returnToPlayerWeight,
             health,
-            healthSystem,
-            isSeeking,
-            isSeekingPlayer,
-            playerStateMachine
+            _healthSystem,
+            _isSeeking,
+            _isSeekingPlayer,
+            playerStateMachine,
+            bloodOnDeath,
+            blood
             );
 
         InitializeStates();
@@ -93,33 +100,21 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
         base.Start();
         SpacialHashMap.instance.Register(_context);
 
-        EnemyUI.instance.Register(transform, healthSystem);
+        EnemyUI.instance.Register(transform, _healthSystem);
     }
-    protected override void Update()
-    {
-        base.Update();
-    }
+    
     private void InitializeStates()
     {
         States.Add(EnemyStates.Seek, new SeekState(_context, EnemyStates.Seek));
         States.Add(EnemyStates.Attack, new AttackState(_context, EnemyStates.Attack));
         States.Add(EnemyStates.Flocking, new FlockingState(_context, EnemyStates.Flocking));
+        States.Add(EnemyStates.Death, new DeathState(_context, EnemyStates.Death));
         CurrentState = States[EnemyStates.Seek];
     }
-
-
+    
     public void OnParticleCollision(GameObject other)
     {
-        healthSystem.Damage(10);
-
-
-        if (healthSystem.GetHealthPercentage() == 0)
-        {
-            AttackSlotManager.instance.ReleaseSlot(_context);
-            EnemyUI.instance.UnRegister(transform);
-            SpacialHashMap.instance.UnRegister(_context);
-            Destroy(this.gameObject);
-        }
+        _healthSystem.Damage(10);
     }
 
     //private void OnDrawGizmos()

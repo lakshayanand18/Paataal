@@ -10,6 +10,5 @@ public class ExpandMeshBounds : MonoBehaviour
             Bounds b = mesh.bounds;
             b.Expand(padding);
             mesh.bounds = b;
-            Debug.Log(mesh.bounds);
         }
 }

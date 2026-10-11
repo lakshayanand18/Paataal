@@ -42,7 +42,12 @@ public class AttackState : EnemyInteractionState
                 return EnemyStateMachine.EnemyStates.Seek;
             }
         }
-
+        
+        if (Context.HealthSystem.GetHealthPercentage() == 0)
+        {
+            return EnemyStateMachine.EnemyStates.Death;
+        }
+        
         return StateKey;
     }
     public override void OnTriggerEnter(Collider other) { }

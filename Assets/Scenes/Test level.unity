@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.002
   m_LinearFogStart: 0
   m_LinearFogEnd: 250
-  m_AmbientSkyColor: {r: 0, g: 0.00699541, b: 0.07227186, a: 1}
+  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0, g: 0.08274605, b: 0.26415092, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SubtractiveShadowColor: {r: 1, g: 1, b: 1, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 187bc591468367c4d83a041d2462abfe, type: 2}
   m_HaloStrength: 1
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -8494,13 +8494,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6532815, y: -0.27059805, z: -0.27059805, w: 0.6532815}
+  m_LocalRotation: {x: 0.64749604, y: -0.22793457, z: -0.28416353, w: 0.66936225}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: -90, z: -90}
+  m_LocalEulerAnglesHint: {x: 47.5, y: -85.11, z: -90}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11460,7 +11460,10 @@ MonoBehaviour:
   player: {fileID: 1248823764}
   Crosshair: {fileID: 956959506}
   gameOver: {fileID: 1428945954}
+  winner: {fileID: 0}
   pause: {fileID: 0}
+  timeStartWarning: {fileID: 0}
+  timeLine: {fileID: 0}
 --- !u!4 &622784666
 Transform:
   m_ObjectHideFlags: 0
@@ -19183,7 +19186,7 @@ GameObject:
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -29745,7 +29748,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc6e7a5e6fccce40817e11873aae5e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreboardText: {fileID: 0}
 --- !u!1 &1497927002 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 82539540710328529, guid: e5162f222c9d79b489a69874e1da53b1, type: 3}
@@ -42694,16 +42696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcbca78f53cd976478c079e428674d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timelineTextLines:
-  - We're glad to have you here Lieutenant.  We could really use your help!
-  - Like shooting fish in a barrel!
-  - It's a trap!  Get out of there.
-  - Crikey!  Looks like you could use a hand.
-  - Never thought I'd see your face around here general...
-  - Righteo let's finish this once and for all.
-  - Struth!  Looks like the galaxy just got a little more safe.
-  - Yeeeehaw!!  You did it!
-  dialogText: {fileID: 0}
 --- !u!114 &2098046052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43802,6 +43794,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146919774}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &555373660345749679
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 61.24998
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 133.47925
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -452.49567
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3065685064360045700, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094111168362884022, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
+      propertyPath: m_Name
+      value: blood particle system
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 646be3bdfc7eec52b948d80c43a2d089, type: 3}
 --- !u!1001 &1998572889684021435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43998,3 +44047,4 @@ SceneRoots:
   - {fileID: 655840359}
   - {fileID: 1069066313}
   - {fileID: 622784666}
+  - {fileID: 555373660345749679}

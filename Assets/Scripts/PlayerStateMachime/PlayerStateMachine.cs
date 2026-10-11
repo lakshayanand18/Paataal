@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 public class PlayerStateMachine : MonoBehaviour
 {
 
@@ -17,8 +18,10 @@ public class PlayerStateMachine : MonoBehaviour
     RaycastHit cameraHit;
     RaycastHit playerHit;
     [SerializeField] Camera mainCamera;
-    [SerializeField] GameObject[] lazers;
-    ParticleSystem emmitionSystem;
+    
+    // Particle System
+    [SerializeField] ParticleSystem[] lasers;
+    [SerializeField] float fireRate = 1f;
 
     //Movement
     [SerializeField] float _performenceStateSpeed;
@@ -34,7 +37,6 @@ public class PlayerStateMachine : MonoBehaviour
     Vector3 _currentMovementInput;
     Vector3 _currentMovement;
     Vector2 _currentAbilityType;
-    // variables for coroutines 
 
     //EnemyAttackSloting
     AttackSlotManager _attackSlotManager ;
@@ -103,6 +105,7 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+        StartCoroutine("FireCoroutine");
     }
     void onFireInput(InputAction.CallbackContext context)
     {
@@ -124,21 +127,18 @@ public class PlayerStateMachine : MonoBehaviour
     void Update() 
     {
         _currentState.UpdateStates();
-
-        //PlayerDamage(5);
     }
     void FixedUpdate() {
         ProcessMovement();
         ProcessRotation();
         ModelBehaviour();
-        Processfire();
     }
     void ProcessRotation() {
         //rotate player model to face movement direction
         offset = _crosshair.offset;
 
-        Quaternion TargetRotation = Quaternion.Euler(-offset.y / 530f * 45f, offset.x / 530f * 45f, -offset.x / 530f * 30f);
-        _playerModel.localRotation = Quaternion.Slerp(_playerModel.localRotation, TargetRotation, Time.fixedDeltaTime * _localRotationSpeed); 
+        Quaternion targetRotation = Quaternion.Euler(-offset.y / 530f * 45f, offset.x / 530f * 45f, -offset.x / 530f * 30f);
+        _playerModel.localRotation = Quaternion.Slerp(_playerModel.localRotation, targetRotation, Time.fixedDeltaTime * _localRotationSpeed); 
 
         if(offset.sqrMagnitude >= _deadzoneRadius * _deadzoneRadius) {
             Vector3 torque = new Vector3(-offset.y, offset.x, 0f) * _rotationSensitivity;   
@@ -161,23 +161,32 @@ public class PlayerStateMachine : MonoBehaviour
         Vector3 offset2D = new Vector3(-offset.x /530f * 10f,-offset.y / 530f * 8f, 0f);
         _playerModel.localPosition = Vector3.Lerp(_playerModel.localPosition, offset2D, Time.fixedDeltaTime * _localCameraMovement);
     }
-
-    void Processfire() {
-        foreach(GameObject lazer in lazers) 
+    
+    IEnumerator FireCoroutine()
+    {
+        while(true)
         {
-            Vector3 aim = GetAimTarget();
-            lazer.transform.LookAt(aim);
-            var emmitionSystem = lazer.GetComponent<ParticleSystem>().emission;
-            emmitionSystem.enabled = _isFiring;
+            if (_isFiring)
+            {
+                foreach (ParticleSystem laser in lasers)
+                {
+                    laser.transform.LookAt(GetAimTarget());
+                    laser.Emit(1);
+                }
+
+                yield return new WaitForSeconds(fireRate);
+            }
+
+            yield return null;
         }
     }
-    public Vector3 GetAimTarget() {
+    
+    private Vector3 GetAimTarget() {
         Ray ray = mainCamera.ScreenPointToRay(_aim.position);
         if (Physics.Raycast(ray, out cameraHit))
         {
             return cameraHit.point;
         }
-        
         return ray.origin + ray.direction * 1000f;
     }
 

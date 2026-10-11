@@ -60,6 +60,11 @@ public class SeekState : EnemyInteractionState
         if (Context.IsAttacking)
             return EnemyStateMachine.EnemyStates.Attack;
 
+        if (Context.HealthSystem.GetHealthPercentage() == 0)
+        {
+            return EnemyStateMachine.EnemyStates.Death;
+        }
+        
         return StateKey;
     }
 

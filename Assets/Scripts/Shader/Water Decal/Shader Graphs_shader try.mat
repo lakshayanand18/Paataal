@@ -61,7 +61,7 @@ Material:
     - _QueueOffset: 0
     - _angle_speed: 0.54
     - _angle_speed_1: 0.02
-    - _density: 2.08
+    - _density: 4.44
     - _voronoi_speed: 8.69
     - _voronoi_speed_1: 1
     m_Colors:

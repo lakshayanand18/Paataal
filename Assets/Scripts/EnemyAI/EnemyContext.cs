@@ -14,7 +14,8 @@ public class EnemyContext
     LayerMask _playerLayerMask;
     LayerMask _obstacleLayerMask;
 
-    //A* variables
+    ParticleSystem _deathParticles;
+    ParticleSystem _heartParticles;
 
     private bool _isLeader;
     private MonoBehaviour _monoBehaviour;
@@ -73,7 +74,9 @@ public class EnemyContext
         bool isSeeking,
         bool isSloted,
 
-        PlayerStateMachine playerStateMachine
+        PlayerStateMachine playerStateMachine,
+        ParticleSystem  deathParticles,
+        ParticleSystem  heartParticles
         
         )
     {
@@ -101,6 +104,8 @@ public class EnemyContext
         _isSeeking = isSeeking;
         _isSloted = isSloted;
         _playerStateMachine = playerStateMachine;
+        _deathParticles = deathParticles;
+        _heartParticles = heartParticles;
     }
 
     public Rigidbody Rb => _rb;
@@ -178,7 +183,15 @@ public class EnemyContext
     public PlayerStateMachine PlayerStateMachine
     {
         get { return _playerStateMachine; }
-        
+    }
+
+    public ParticleSystem DeathParticles
+    {
+        get { return _deathParticles; }
+    }
+    public ParticleSystem HeartParticles
+    {
+        get { return _heartParticles; }
     }
 }
 
