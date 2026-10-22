@@ -1,30 +1,43 @@
 using UnityEngine;
 
-public class PlayerSpeedState : PlayerBaseState
+public class PlayerSpeedState : PlayerMovementBaseState
 {
-    public PlayerSpeedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base (currentContext, playerStateFactory){}
+    private PlayerContext _context;
+
+    public PlayerSpeedState(PlayerContext context, PlayerMovementStateManager.MovementStates estate) : base(context, estate)
+    {
+        _context = context;
+    }
     public override void EnterState()
     {
-        Ctx.MovementSpeedModifier = 1.5f;
+        _context.MovementSpeedModifier = 1.5f;
+        _context.MovementSpeed *= _context.MovementSpeedModifier;
     }
     public override void UpdateState()
     {
-        CheckSwitchState();
+        
     }
     public override void ExitState()
     {
-        Ctx.MovementSpeedModifier = 1f;
+        _context.MovementSpeedModifier = 1f;
     }
-    public override void InitializeSubState(){ }
-    public override void CheckSwitchState()
+
+    public override void FixedUpdateState()
     {
-        if (!Ctx.IsMovementPressed && !Ctx.IsSpeedPressed && !(Currentsubstate is PlayerIdleState))
+        ProcessMovement();
+    }
+
+    public override PlayerMovementStateManager.MovementStates GetNextState()
+    {
+        if (!_context.IsMovementPressed && !_context.IsSpeedPressed)
         {
-            SwitchState(Factory.Idle());
+            return PlayerMovementStateManager.MovementStates.Idle;
         }
-        if (Ctx.IsMovementPressed && !Ctx.IsSpeedPressed && !(Currentsubstate is PlayerMoveState))
+
+        if (_context.IsMovementPressed && !_context.IsSpeedPressed)
         {
-            SwitchState(Factory.Move());
+            return PlayerMovementStateManager.MovementStates.Move;
         }
+        return StateKey;
     }
 }

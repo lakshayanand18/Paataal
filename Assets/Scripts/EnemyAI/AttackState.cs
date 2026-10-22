@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AttackState : EnemyInteractionState
+public class AttackState : EnemyBaseState
 {
     public AttackState(EnemyContext context, EnemyStateMachine.EnemyStates estate) : base(context, estate)
     {
@@ -50,16 +50,13 @@ public class AttackState : EnemyInteractionState
         
         return StateKey;
     }
-    public override void OnTriggerEnter(Collider other) { }
-    public override void OnTriggerStay(Collider other) { }
-    public override void OnTriggerExit(Collider other) { }
 
     IEnumerator Attack(EnemyContext other)
     {
         while(true)
         {   other.IsAttackingCoroutineRunning = true;
             other.IsAttackingPlayer = true;
-            Context.PlayerStateMachine.PlayerDamage(5);
+            Context.PlayerCombatStateManager.PlayerDamage(5);
 
             yield return new WaitForSeconds(1f);
 

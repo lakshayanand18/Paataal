@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathState : EnemyInteractionState
+public class DeathState : EnemyBaseState
 {
     public DeathState(EnemyContext context, EnemyStateMachine.EnemyStates estate) : base(context, estate)
     {
@@ -47,9 +47,5 @@ public class DeathState : EnemyInteractionState
     {
         return StateKey;
     }
-
-    public override void OnTriggerEnter(Collider other) { }
-    public override void OnTriggerStay(Collider other) { }
-    public override void OnTriggerExit(Collider other) { }
 }
 

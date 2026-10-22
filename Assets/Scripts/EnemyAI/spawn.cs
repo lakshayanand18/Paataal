@@ -5,10 +5,10 @@ using Random = UnityEngine.Random;
 
 public class spawn : MonoBehaviour
 {
-    public int waveList;
-    public GameObject enemy;
-    public int spawnRadius;
-    public float timeBeforeNewWave;
+    [SerializeField] private int waveList;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private int spawnRadius;
+    [SerializeField] private float timeBeforeNewWave;
     private float newWaveTime = 0f;
 
     private void Start()

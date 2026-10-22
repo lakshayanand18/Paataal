@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class EnemyInteractionState : BaseState<EnemyStateMachine.EnemyStates>
+public abstract class EnemyBaseState : BaseState<EnemyStateMachine.EnemyStates>
 {
     protected EnemyContext Context;
     protected List<EnemyContext> myListOfNeighbours = new List<EnemyContext>(50);
 
-    public EnemyInteractionState(EnemyContext context, EnemyStateMachine.EnemyStates stateKey) : base(stateKey)
+    public EnemyBaseState(EnemyContext context, EnemyStateMachine.EnemyStates stateKey) : base(stateKey)
     {
         Context = context;
     }
@@ -72,17 +72,17 @@ public abstract class EnemyInteractionState : BaseState<EnemyStateMachine.EnemyS
         return totalAvoidanceForce * Context.AlignmentWeight;
     }
 
-    public void HordeCheck()
-    {
-        SpacialHashMap.instance.GetNeighbours(Context.EnemyTransform.position, myListOfNeighbours);
-        foreach (EnemyContext enemy in myListOfNeighbours)
-        { 
-            if(enemy.IsSeeking == true)
-            {
-                Context.IsSeeking = true;
-            }
-        }
-    }
+    // public void HordeCheck()
+    // {
+    //     SpacialHashMap.instance.GetNeighbours(Context.EnemyTransform.position, myListOfNeighbours);
+    //     foreach (EnemyContext enemy in myListOfNeighbours)
+    //     { 
+    //         if(enemy.IsSeeking == true)
+    //         {
+    //             Context.IsSeeking = true;
+    //         }
+    //     }
+    // }
 
     public Vector3 Separation(List<EnemyContext> neighbours)
     {

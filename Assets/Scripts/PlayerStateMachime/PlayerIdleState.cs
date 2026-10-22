@@ -1,31 +1,38 @@
-public class PlayerIdleState : PlayerBaseState
+using UnityEngine;
+
+public class PlayerIdleState : PlayerMovementBaseState
 {
-    public PlayerIdleState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory){}
+    private PlayerContext _context;
+    public PlayerIdleState(PlayerContext context, PlayerMovementStateManager.MovementStates estate) : base(context ,estate)
+    {
+        _context = context;
+    }
     public override void EnterState()
     {
-        Ctx.Rb.linearDamping = 20f;
-        Ctx.MovementSpeed = 0f;
+        _context.Rigidbody.linearDamping = 20f;
+        _context.MovementSpeed = 0f;
     }
     public override void UpdateState()
     {
-        CheckSwitchState();
+        
     }
+
+    public override void FixedUpdateState()
+    {
+        ProcessMovement();
+    }
+
     public override void ExitState()
     {
-        Ctx.Rb.linearDamping = 0f;
+        _context.Rigidbody.linearDamping = 0f;
     }
-    public override void InitializeSubState(){}
-    public override void CheckSwitchState()
-    {
-        if (Ctx.IsMovementPressed && Ctx.IsSpeedPressed && !(Currentsubstate is PlayerSpeedState))
-        {
-            SwitchState(Factory.Speed());
-        }
-        if (Ctx.IsMovementPressed && !Ctx.IsSpeedPressed && !(Currentsubstate is PlayerMoveState))
-        {
-            SwitchState(Factory.Move());
-        }
-    }
-    
 
+    public override PlayerMovementStateManager.MovementStates GetNextState()
+    {
+        if(_context.IsMovementPressed && !_context.IsSpeedPressed)
+            return PlayerMovementStateManager.MovementStates.Move;
+        if(_context.IsMovementPressed && _context.IsSpeedPressed)
+            return PlayerMovementStateManager.MovementStates.Speed;
+        return StateKey;
+    }
 }

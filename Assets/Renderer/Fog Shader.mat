@@ -34,7 +34,7 @@ Material:
     - _TransitionDistance: 800
     - _WaterHeight: 688.4
     m_Colors:
-    - _Color: {r: 0.15819687, g: 0.4245283, b: 0.3093154, a: 1}
+    - _Color: {r: 0.08851013, g: 0.3679245, b: 0.26946127, a: 1}
     - _LightContribution: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -32,7 +32,7 @@ public class EnemyContext
     private float _returnToPlayerWeight;
     private int _health;
     private HealthSystem _healthSystem;
-    private PlayerStateMachine _playerStateMachine;
+    private PlayerCombatStateManager _playerCombatStateManager;
 
     // flags
     private bool _isSeeking;
@@ -74,10 +74,9 @@ public class EnemyContext
         bool isSeeking,
         bool isSloted,
 
-        PlayerStateMachine playerStateMachine,
+        PlayerCombatStateManager playerCombatStateManager,
         ParticleSystem  deathParticles,
         ParticleSystem  heartParticles
-        
         )
     {
         _rb = rb;
@@ -103,7 +102,7 @@ public class EnemyContext
         _healthSystem = healtSystem;
         _isSeeking = isSeeking;
         _isSloted = isSloted;
-        _playerStateMachine = playerStateMachine;
+        _playerCombatStateManager = playerCombatStateManager;
         _deathParticles = deathParticles;
         _heartParticles = heartParticles;
     }
@@ -180,9 +179,9 @@ public class EnemyContext
         set { _assignedSlotIndex = value; }
 
     }
-    public PlayerStateMachine PlayerStateMachine
+    public PlayerCombatStateManager PlayerCombatStateManager
     {
-        get { return _playerStateMachine; }
+        get { return _playerCombatStateManager; }
     }
 
     public ParticleSystem DeathParticles

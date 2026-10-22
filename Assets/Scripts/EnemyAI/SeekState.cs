@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeekState : EnemyInteractionState
+public class SeekState : EnemyBaseState
 {
     Vector3 smoothedAvoidance = Vector3.zero;
 
@@ -43,8 +43,8 @@ public class SeekState : EnemyInteractionState
         {
             // rotate towards slot direction
             Context.EnemyTransform.rotation = Quaternion.Slerp(Context.EnemyTransform.rotation, Quaternion.LookRotation(boidDirection),
-            Time.deltaTime * Context.TurnSpeed);
-            velocity = Vector3.ClampMagnitude(boidDirection * Context.Speed - Context.Rb.linearVelocity, Context.MaxForce);
+            Time.fixedDeltaTime * Context.TurnSpeed);
+            velocity = Vector3.ClampMagnitude(boidDirection * Context.Speed - Context.Rb.linearVelocity * Time.fixedDeltaTime, Context.MaxForce);
         }
 
         Context.Rb.AddForce(velocity);
@@ -67,10 +67,6 @@ public class SeekState : EnemyInteractionState
         
         return StateKey;
     }
-
-    public override void OnTriggerEnter(Collider other) { }
-    public override void OnTriggerStay(Collider other) { }
-    public override void OnTriggerExit(Collider other) { }
 
     // steer towards assigned slot position
     Vector3 Seek()

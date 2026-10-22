@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlockingState : EnemyInteractionState
+public class FlockingState : EnemyBaseState
 { 
     Vector3 smoothedAvoidance;
     
@@ -43,19 +43,6 @@ public class FlockingState : EnemyInteractionState
             velocity = Vector3.ClampMagnitude(flocking * Context.Speed - Context.Rb.linearVelocity, Context.MaxForce);
         }
         Context.Rb.AddForce(velocity);
-    }
-
-    public override void OnTriggerEnter(Collider other) 
-    {
-
-    }
-    public override void OnTriggerStay(Collider other) 
-    { 
-
-    }
-    public override void OnTriggerExit(Collider other) 
-    { 
-
     }
 
     public override EnemyStateMachine.EnemyStates GetNextState()

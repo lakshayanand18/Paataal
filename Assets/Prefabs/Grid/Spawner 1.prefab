@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3497411952215513009}
-  - component: {fileID: 7514983886203917951}
+  - component: {fileID: 2596198050230860185}
   m_Layer: 0
   m_Name: Spawner 1
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7514983886203917951
+--- !u!114 &2596198050230860185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b8250859c2fc64d947562b753bd3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::spawn
-  waveList: 3
-  Enemy: {fileID: 82539540710328529, guid: e5162f222c9d79b489a69874e1da53b1, type: 3}
-  SpawnRadious: 100
-  TimeBeforNewWave: 10
+  waveList: 1
+  enemy: {fileID: 82539540710328529, guid: e5162f222c9d79b489a69874e1da53b1, type: 3}
+  spawnRadius: 10
+  timeBeforeNewWave: 20

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
     [Header ("Player")]
-    [SerializeField] PlayerStateMachine player;
+    [SerializeField] PlayerCombatStateManager playerCombat;
     [SerializeField] CrossMovement Crosshair;
 
     [Header("Game Over")]
@@ -27,8 +27,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        player._playerInput.CharacterControls.Pause.started += onPauseInput;
-        player._playerInput.CharacterControls.Pause.canceled += onPauseInput;
+        playerCombat.PlayerInput.CharacterControls.Pause.started += onPauseInput;
+        playerCombat.PlayerInput.CharacterControls.Pause.canceled += onPauseInput;
     }
 
     void onPauseInput(InputAction.CallbackContext context)
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             winner.Setup();
         }
-        if (player.IsPlayerDead(playerDeath))
+        if (playerCombat.IsPlayerDead(playerDeath))
         {
             Crosshair.enabled = false;
             Cursor.visible = true;

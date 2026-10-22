@@ -10260,7 +10260,6 @@ GameObject:
   - component: {fileID: 2103068916953704083}
   - component: {fileID: 3288386417825936135}
   - component: {fileID: 6892153449479387154}
-  - component: {fileID: 8482830202609330011}
   m_Layer: 6
   m_Name: Player Ship
   m_TagString: Player
@@ -10337,35 +10336,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &8482830202609330011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8973585397569132283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13881dc0aa84be842ae039e5968bc128, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _deadzoneRadius: 100
-  _rotationSensitivity: 0.1
-  _localRotationSpeed: 3.5
-  _localCameraMovement: 10
-  _crosshair: {fileID: 0}
-  _aim: {fileID: 0}
-  UI: {fileID: 0}
-  mainCamera: {fileID: 5187946223656049981}
-  lazers:
-  - {fileID: 5305612796280701585}
-  _performenceStateSpeed: 2500
-  _movementSpeed: 50000
-  _movementSpeedModifier: 20
-  _playerModel: {fileID: 1416654409355371995}
-  health: 100
-  healthBar: {fileID: 0}
-  damage: 0
 --- !u!1001 &1450808687536063024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10489,11 +10459,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9b2b0765701ba948a5a3c71b75a4d37, type: 3}
---- !u!1 &5305612796280701585 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2282422308057274673, guid: b9b2b0765701ba948a5a3c71b75a4d37, type: 3}
-  m_PrefabInstance: {fileID: 6200779685240658848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6136990301045646108 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 227256325978831036, guid: b9b2b0765701ba948a5a3c71b75a4d37, type: 3}

@@ -7670,8 +7670,8 @@
     "m_ObjectId": "5731a921764645cd9bd9f0e556df4b0b",
     "m_Title": "Specualr Reflection",
     "m_Position": {
-        "x": 1673.9998779296875,
-        "y": 3326.999755859375
+        "x": 1674.0,
+        "y": 3327.0
     }
 }
 
@@ -9341,7 +9341,7 @@
     "m_Title": "Lambertion diffusion",
     "m_Position": {
         "x": 1649.0,
-        "y": 2833.999755859375
+        "y": 2834.0
     }
 }
 
@@ -9786,7 +9786,7 @@
     "m_ObjectId": "7ae7559671294362a822c627805cc2cc",
     "m_Title": "Normal",
     "m_Position": {
-        "x": 796.9999389648438,
+        "x": 797.0,
         "y": 1334.0
     }
 }
@@ -12015,8 +12015,8 @@
     "m_ObjectId": "9f0b26444e784338bf3f3e602ed9ea5d",
     "m_Title": "WaterColor",
     "m_Position": {
-        "x": -247.00001525878907,
-        "y": 1338.9998779296875
+        "x": -247.0,
+        "y": 1339.0
     }
 }
 
@@ -16181,7 +16181,7 @@
     "m_ObjectId": "eaaa34cd39ae4b43ae1a6415c595c969",
     "m_Title": "Reflection",
     "m_Position": {
-        "x": -293.0000305175781,
+        "x": -293.0,
         "y": 276.0
     }
 }

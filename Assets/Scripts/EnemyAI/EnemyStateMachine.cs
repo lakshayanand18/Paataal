@@ -18,7 +18,7 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
     
     //Player particle collision 
     [SerializeField] private ParticleSystem[] lasers;
-    [SerializeField] PlayerStateMachine playerStateMachine;
+    [SerializeField] PlayerCombatStateManager playerCombatStateManager;
     [SerializeField] Transform player;
     [SerializeField] LayerMask playerLayerMask;
     [SerializeField] LayerMask obstacleLayerMask;
@@ -55,11 +55,11 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
         // Health System
         _healthSystem = new HealthSystem(health);
         
-        if (playerStateMachine == null)
+        if (playerCombatStateManager == null)
         {
-            playerStateMachine = FindAnyObjectByType<PlayerStateMachine>();
-            player = playerStateMachine.transform;
-            playerCollider = playerStateMachine.GetComponent<Collider>();
+            playerCombatStateManager = FindAnyObjectByType<PlayerCombatStateManager>();
+            player = playerCombatStateManager.transform;
+            playerCollider = playerCombatStateManager.GetComponent<Collider>();
         }
         
         // Enemy Context constructor 
@@ -87,7 +87,7 @@ public class EnemyStateMachine : StateManager<EnemyStateMachine.EnemyStates>
             _healthSystem,
             _isSeeking,
             _isSeekingPlayer,
-            playerStateMachine,
+            playerCombatStateManager,
             bloodOnDeath,
             blood
             );
